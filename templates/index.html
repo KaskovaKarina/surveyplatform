@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Платформа свода опросов - СГСПУ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9ff;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f2ff;
+        }
+        
+        .upload-area input {
+            display: none;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .file-list {
+            margin-top: 20px;
+        }
+        
+        .file-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .file-info {
+            flex: 1;
+        }
+        
+        .file-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .file-meta {
+            font-size: 12px;
+            color: #6c757d;
+        }
+        
+        .badge {
+            background: #28a745;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        
+        .mapping-form {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .mapping-form select {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow-x: auto;
+            display: block;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            font-size: 12px;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .mapping-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Платформа свода опросов</h1>
+            <p>Единая система интеграции данных опросов и анкетирований СГСПУ</p>
+        </div>
+        
+       <div class="nav-links">
+    <a href="/" class="nav-link">📁 Загрузка</a>
+    <a href="/files" class="nav-link">📋 Мои файлы</a>
+    <a href="/process" class="nav-link">🔄 Запустить пайплайн</a>
+    <a href="/analytics" class="nav-link">📈 Аналитика</a>
+</div>
+        
+        <div class="card">
+            <h2>📤 Загрузка файлов опросов</h2>
+            <p style="color: #666; margin-top: 10px;">Поддерживаются форматы: Excel (.xlsx, .xls) и CSV</p>
+            
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-icon">📁</div>
+                    <div>Нажмите для выбора файлов</div>
+                    <div style="font-size: 12px; color: #999; margin-top: 10px;">или перетащите файлы сюда</div>
+                    <input type="file" name="files" id="fileInput" multiple style="display: none;" onchange="this.form.submit()">
+                </div>
+            </form>
+            
+            <div class="alert alert-success" style="margin-top: 20px;">
+                <strong>💡 Важно!</strong> Для корректной работы пайплайна каждый файл опроса должен содержать колонку с идентификатором студента (ID). 
+                После загрузки файлов перейдите в раздел "Мои файлы", чтобы настроить соответствие колонок.
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>🚀 Как это работает</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div>
+                    <div style="font-size: 2em;">1️⃣</div>
+                    <h3>Загрузка</h3>
+                    <p>Загрузите файлы опросов из любых источников (Яндекс.Формы, Google Forms)</p>
+                </div>
+                <div>
+                    <div style="font-size: 2em;">2️⃣</div>
+                    <h3>Настройка</h3>
+                    <p>Укажите, в какой колонке каждого файла находится ID студента</p>
+                </div>
+                <div>
+                    <div style="font-size: 2em;">3️⃣</div>
+                    <h3>Обработка</h3>
+                    <p>Пайплайн автоматически объединяет все опросы в единую таблицу</p>
+                </div>
+                <div>
+                    <div style="font-size: 2em;">4️⃣</div>
+                    <h3>Анализ</h3>
+                    <p>Скачайте результат или проводите анализ прямо на платформе</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

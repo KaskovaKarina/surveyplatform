@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результат обработки - Платформа свода опросов</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            position: sticky;
+            top: 0;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        tr:hover {
+            background: #e9ecef;
+        }
+        
+        .column-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .column-tag {
+            background: #e9ecef;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+        
+        .success-icon {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .info-box {
+            background: #f0f2ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .info-box h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Результат обработки</h1>
+            <p>Единая таблица опросов сформирована</p>
+        </div>
+        
+      <div class="nav-links">
+    <a href="/" class="nav-link">📁 Загрузка</a>
+    <a href="/files" class="nav-link">📋 Мои файлы</a>
+    <a href="/process" class="nav-link">🔄 Запустить пайплайн</a>
+    <a href="/analytics" class="nav-link">📈 Аналитика</a>
+</div>
+        
+        {% if error %}
+        <div class="card">
+            <div class="alert alert-error">
+                <strong>⚠️ Ошибка!</strong> {{ error }}
+            </div>
+            <div class="btn-group">
+                <a href="/files" class="btn btn-primary">Перейти к файлам</a>
+                <a href="/" class="btn btn-secondary">Загрузить файлы</a>
+            </div>
+        </div>
+        {% else %}
+        <div class="card">
+            <div class="success-icon">✅</div>
+            <h2 style="text-align: center;">Пайплайн успешно выполнен!</h2>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">{{ info.rows }}</div>
+                    <div class="stat-label">Всего ответов</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ info.columns }}</div>
+                    <div class="stat-label">Всего колонок</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ info.processed_at }}</div>
+                    <div class="stat-label">Дата обработки</div>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h4>📋 Список колонок в единой таблице:</h4>
+                <div class="column-list">
+                    {% for col in info.column_names %}
+                    <span class="column-tag">{{ col }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <a href="/download/excel" class="btn btn-success">📥 Скачать Excel</a>
+                <a href="/download/csv" class="btn btn-primary">📥 Скачать CSV</a>
+                <a href="/files" class="btn btn-secondary">📁 Вернуться к файлам</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3>📊 Предпросмотр данных (первые 100 строк)</h3>
+            <div class="table-container">
+                {{ table|safe }}
+            </div>
+            <p style="margin-top: 15px; color: #666; font-size: 12px;">
+                * Показаны первые 100 строк. Полные данные можно скачать в Excel или CSV формате.
+            </p>
+        </div>
+        
+        <div class="card">
+            <h3>💡 Аналитический вывод</h3>
+            <div class="info-box">
+                <h4>О корреляции доходов и удовлетворенности столовой:</h4>
+                <p>Благодаря созданной единой таблице, исследователь теперь может:</p>
+                <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                    <li>Сопоставить данные о стипендии студента с его ответами об удовлетворенности столовой</li>
+                    <li>Провести корреляционный анализ между уровнем дохода и оценкой цен в столовой</li>
+                    <li>Выявить группы студентов, для которых стоимость питания является критическим фактором</li>
+                    <li>Сформировать рекомендации по ценообразованию в студенческой столовой</li>
+                </ul>
+                <p style="margin-top: 15px; font-style: italic;">
+                    🔑 <strong>Ключевой момент:</strong> Такой анализ стал возможен только благодаря наличию единого идентификатора студента во всех опросах и разработанному пайплайну интеграции данных.
+                </p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

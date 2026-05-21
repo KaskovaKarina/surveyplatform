@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои файлы - Платформа свода опросов</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .file-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            scroll-margin-top: 20px;
+        }
+        
+        .file-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .file-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .file-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .columns-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .column-badge {
+            background: #e9ecef;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-family: monospace;
+        }
+        
+        .mapping-form {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .mapping-form select {
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            min-width: 200px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            color: #6c757d;
+        }
+        
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .badge {
+            background: #28a745;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        
+        .badge-reference {
+            background: #17a2b8;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            animation: fadeOut 3s ease forwards;
+        }
+        
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; display: none; }
+        }
+        
+        .floating-actions {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .scroll-top {
+            background: #667eea;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            font-size: 24px;
+        }
+        
+        .scroll-top:hover {
+            background: #764ba2;
+            transform: scale(1.1);
+        }
+        
+        .info-box {
+            background: #e8f4fd;
+            border-left: 4px solid #17a2b8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .info-box h3 {
+            color: #17a2b8;
+            margin-bottom: 15px;
+        }
+        
+        .info-box ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+        
+        .info-box code {
+            background: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        @media (max-width: 768px) {
+            .mapping-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .file-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Мои файлы опросов</h1>
+            <p>Управление загруженными файлами и настройка идентификаторов</p>
+        </div>
+        
+        <div class="nav-links">
+    <a href="/" class="nav-link">📁 Загрузка</a>
+    <a href="/files" class="nav-link">📋 Мои файлы</a>
+    <a href="/process" class="nav-link">🔄 Запустить пайплайн</a>
+    <a href="/analytics" class="nav-link">📈 Аналитика</a>
+</div>
+        
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <h2>Загруженные файлы</h2>
+                <div style="display: flex; gap: 10px;">
+                    <a href="/clear_all" class="btn btn-danger btn-sm" onclick="return confirm('Удалить все файлы?')">🗑️ Очистить всё</a>
+                    <button onclick="window.location.href='/files'" class="btn btn-secondary btn-sm">🔄 Обновить</button>
+                </div>
+            </div>
+            
+            <!-- Сообщение об успешном сохранении -->
+            {% if request.args.get('saved') %}
+            <div class="success-message" id="successMessage">
+                ✅ Настройки успешно сохранены!
+            </div>
+            {% endif %}
+            
+            {% if files %}
+                {% for file in files %}
+                <div class="file-item" id="file-{{ loop.index }}">
+                    <div class="file-header">
+                        <div>
+                            <span class="file-name">📄 {{ file.name }}</span>
+                            {% if file.is_reference %}
+                            <span class="badge-reference" style="margin-left: 10px;">📚 СПРАВОЧНИК (анкета)</span>
+                            {% endif %}
+                        </div>
+                        <span class="badge">
+                            {{ file.rows }} строк
+                        </span>
+                    </div>
+                    
+                    <div class="file-stats">
+                        <span>📊 Колонок: {{ file.columns|length }}</span>
+                        <span>🆔 Текущий маппинг: <strong>{{ file.mapping }}</strong></span>
+                    </div>
+                    
+                    <div class="columns-list">
+                        {% for col in file.columns %}
+                        <span class="column-badge">{{ col }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    {% if not file.is_reference %}
+                    <form action="/set_mapping" method="post" class="mapping-form" onsubmit="return preserveScroll(this)">
+                        <input type="hidden" name="file_name" value="{{ file.name }}">
+                        <input type="hidden" name="anchor" id="anchor-{{ loop.index }}" value="file-{{ loop.index }}">
+                        <label>🔑 Колонка с СНИЛС студента:</label>
+                        <select name="id_column">
+                            <option value="">-- Выберите колонку --</option>
+                            {% for col in file.columns %}
+                            <option value="{{ col }}" {% if file.mapping == col %}selected{% endif %}>{{ col }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm">💾 Сохранить</button>
+                    </form>
+                    {% else %}
+                    <div class="info-box" style="margin-top: 10px; background: #e8f4fd; padding: 10px; border-radius: 8px;">
+                        <span style="color: #17a2b8;">📌 Этот файл распознан как справочник студентов (анкета).</span>
+                        <span style="color: #666; margin-left: 10px;">Он будет автоматически использован для добавления информации о группе, стипендии и факультете.</span>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="action-buttons">
+                        <a href="/delete_file/{{ file.name }}" class="btn btn-danger btn-sm" onclick="return confirm('Удалить этот файл?')">🗑️ Удалить</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="icon">📭</div>
+                    <h3>Нет загруженных файлов</h3>
+                    <p>Перейдите на главную страницу, чтобы загрузить файлы опросов</p>
+                    <a href="/" class="btn btn-primary" style="margin-top: 20px;">Загрузить файлы</a>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- БЛОК С ИНСТРУКЦИЕЙ ПО АНКЕТЕ СТУДЕНТОВ -->
+        <div class="card" style="background: #e8f4fd; border-left: 4px solid #17a2b8;">
+            <h3 style="color: #17a2b8; margin-bottom: 15px;">📌 Важно! Анкета студентов (справочник)</h3>
+            <p style="margin-bottom: 10px;">
+                Для корректной работы пайплайна создайте отдельный опрос <strong>"Анкета студента"</strong>, где студенты укажут свои данные:
+            </p>
+            <ul style="margin-left: 20px; margin-bottom: 15px; line-height: 1.8;">
+                <li><strong>СНИЛС</strong> (обязательно, будет использоваться как идентификатор)</li>
+                <li><strong>Группа</strong></li>
+                <li><strong>Стипендия</strong></li>
+                <li><strong>Факультет</strong></li>
+            </ul>
+            <p style="margin-bottom: 10px;">
+                <strong>Как назвать файл:</strong>
+            </p>
+            <ul style="margin-left: 20px; margin-bottom: 15px;">
+                <li>Назовите файл с анкетой так, чтобы в названии было слово <strong>"reference"</strong> или <strong>"анкета"</strong></li>
+                <li>Например: <code>reference_students.xlsx</code> или <code>анкета_студентов.xlsx</code></li>
+                <li>Система автоматически распознает этот файл как справочник</li>
+            </ul>
+            <p style="margin-top: 10px; padding: 10px; background: white; border-radius: 8px;">
+                💡 <strong>Совет:</strong> Попросите студентов заполнить анкету один раз в начале учебного года. 
+                Затем используйте эту выгрузку для всех последующих опросов.
+            </p>
+        </div>
+        
+        <div class="card">
+            <h2>📖 Инструкция по работе с СНИЛС</h2>
+            <ol style="margin-left: 20px; line-height: 1.8;">
+                <li><strong>Шаг 1:</strong> Создайте и загрузите анкету студентов (файл с СНИЛС, ФИО, группой, стипендией, факультетом)</li>
+                <li><strong>Шаг 2:</strong> Создайте опросы (столовая, аудитории, преподавание и т.д.) с обязательным полем <strong>"ФИО"</strong></li>
+                <li><strong>Шаг 3:</strong> Загрузите все файлы опросов на платформу</li>
+                <li><strong>Шаг 4:</strong> Для каждого файла опроса выберите колонку с СНИЛС</li>
+                <li><strong>Шаг 5:</strong> Нажмите "Запустить пайплайн"</li>
+                <li><strong>Шаг 6:</strong> Система объединит все опросы по СНИЛС и добавит данные из анкеты</li>
+            </ol>
+            <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 8px;">
+                <strong>⚠️ Важно:</strong> Студент должен везде указывать СНИЛС одинаково. 
+            </div>
+        </div>
+    </div>
+    
+    <!-- Кнопка "Наверх" -->
+    <div class="floating-actions">
+        <div class="scroll-top" onclick="scrollToTop()" title="Наверх">
+            ↑
+        </div>
+    </div>
+    
+    <script>
+        // Функция для сохранения позиции скролла
+        function preserveScroll(form) {
+            var anchorInput = form.querySelector('input[name="anchor"]');
+            if (anchorInput) {
+                var anchorId = anchorInput.value;
+                sessionStorage.setItem('scrollToAnchor', anchorId);
+            }
+            return true;
+        }
+        
+        // Функция для прокрутки к сохраненному якорю
+        function scrollToSavedAnchor() {
+            var anchorId = sessionStorage.getItem('scrollToAnchor');
+            if (anchorId) {
+                var element = document.getElementById(anchorId);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    sessionStorage.removeItem('scrollToAnchor');
+                }
+            }
+        }
+        
+        // Функция прокрутки наверх
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Автоматическая прокрутка после загрузки страницы
+        window.addEventListener('load', function() {
+            scrollToSavedAnchor();
+            
+            var successMsg = document.getElementById('successMessage');
+            if (successMsg) {
+                setTimeout(function() {
+                    successMsg.style.display = 'none';
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
